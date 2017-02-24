@@ -1,0 +1,13 @@
+{
+  "entrypoint": "index.html",
+  "shell": "index.html",
+  "sources": [
+   "images-optimized/**/*",
+   "src/**/*"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "favicon.ico",
+    "bower_components/custom-elements/custom-elements.min.js"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "devDependencies": {
+    "babel-preset-babili": "^0.0.9",
+    "css-slam": "^1.2.1",
+    "del": "^2.2.2",
+    "dom5": "^2.0.1",
+    "fs-extra": "^1.0.0",
+    "glob": "^7.1.1",
+    "gulp": "gulpjs/gulp#4.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-html-minifier": "^0.1.8",
+    "gulp-if": "^2.0.1",
+    "gulp-jshint": "^2.0.2",
+    "gulp-style-modules": "^0.1.0",
+    "gulp-uglify": "^2.0.0",
+    "jshint": "^2.9.1",
+    "jshint-stylish": "^2.0.0",
+    "merge-stream": "^1.0.1",
+    "parse5": "^2.2.2",
+    "plylog": "^0.4.0",
+    "polymer-analyzer": "^2.0.0-alpha.21",
+    "polymer-build": "^0.6.0-alpha.3",
+    "superagent": "^3.2.1",
+    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
+  },
+  "scripts": {
+    "build": "node ./node_modules/gulp/bin/gulp.js",
+    "ensure-images": "node ./node_modules/gulp/bin/gulp.js ensure-images-optimized",
+    "serve": "yarn run ensure-images && polymer serve -P h2",
+    "deploy": "yarn run build && firebase deploy"
+  },
+  "engines": {
+    "node": ">=7.0.0"
+  },
+  "dependencies": {
+    "@webcomponents/custom-elements": "webcomponents/custom-elements"
+  }
+}
