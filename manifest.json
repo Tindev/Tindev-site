@@ -1,7 +1,7 @@
 {
   "background_color": "#ffffff",
-  "name": "Tinder for Bananas",
-  "short_name": "Tinder for Bananas",
+  "name": "Tindev",
+  "short_name": "Tindev",
   "display": "standalone",
   "icons": [
     {
