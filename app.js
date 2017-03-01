@@ -15,6 +15,30 @@
       url: 'https://github.com/gijsweterings',
       description: '',
       projects: ['Fedar', 'Marlin', 'plannings-tool-server']
+    },
+    {
+      id: 2,
+      name: 'mpasterkamp',
+      image: 'https://avatars2.githubusercontent.com/u/5969131?v=3&s=400',
+      url: 'https://github.com/mpasterkamp',
+      description: '',
+      projects: []
+    },
+    {
+      id: 3,
+      name: 'clanghout',
+      image: 'https://avatars1.githubusercontent.com/u/5969237?v=3&s=460',
+      url: 'https://github.com/clanghout',
+      description: '',
+      projects: ['Health-Informatics-3', 'ti2736c']
+    },
+    {
+      id: 4,
+      name: 'keraito',
+      image: 'https://avatars0.githubusercontent.com/u/5955441?v=3&s=460',
+      url: 'https://github.com/keraito',
+      description: '',
+      projects: ['Beeldverwerking', 'trackotest', 'note-app-elements']
     }
   ];
 
