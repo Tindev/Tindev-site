@@ -1,6 +1,7 @@
 <link rel="import" async href="../bower_components/polymer/polymer.html">
+<link rel="import" async href="../bower_components/paper-input/paper-input.html">
 
-<dom-module id="symposium-homepage">
+<dom-module id="tindev-homepage">
   <template>
     <style>
       :host {
@@ -32,10 +33,59 @@
 
       }
     </style>
+    <div>
+      I am looking for a
+    </div>
+    <paper-input id="language" label="Language" placeholder="Java"></paper-input>
+    <div>
+      developer with
+    </div>
+    <select id="experience">
+      <option>
+        Little
+      </option>
+      <option>
+        Decent
+      </option>
+      <option>
+        A lot of
+      </option>
+    </select>
+    <div>
+      experience who works on
+    </div>
+    <select id="projects">
+      <option>
+        Small
+      </option>
+      <option>
+        Medium
+      </option>
+      <option>
+        Big
+      </option>
+    </select>
+    <div>
+      projects with at least
+    </div>
+    <paper-input id="followers" label="Followers" value="0" type="number"></paper-input>
+    <div>
+      followers.
+    </div>
+    <button on-tap="_search">Search</button>
   </template>
   <script>
     Polymer({
-      is: 'symposium-homepage'
+      is: 'tindev-homepage',
+      _search: function() {
+        var data = {
+          language: this.$.language.value,
+          experience: this.$.experience.value,
+          projects: this.$.projects.value,
+          followers: this.$.followers.value
+        };
+        this.fire('search', data);
+      }
     });
   </script>
 </dom-module>

@@ -229,7 +229,7 @@
         navigation.addEventListener('selected-changed', function(e) {
           var selected = e.detail.value;
           route.data.page = selected;
-          location.path = '2017/' + selected + (selected && '/');
+          location.path = selected + (selected && '/');
           pages.selected = selected;
           menu.checked = false;
         });
