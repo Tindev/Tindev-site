@@ -1,0 +1,67 @@
+<link rel="import" async href="../bower_components/polymer/polymer.html">
+<link rel="import" async href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="es-query">
+  <template>
+    <iron-ajax
+        auto
+        url="[[computedUrl]]"
+        handle-as="json"
+        on-response="_setResult"
+        debounce-duration="300"></iron-ajax>
+  </template>
+  <script>
+    Polymer({
+      is: 'es-query',
+
+      properties: {
+        baseDomain: {
+          type: String,
+          value: "http://elasticsearch:9200/"
+        },
+        computedUrl: {
+          type: String,
+          computed: '_computeUrl(baseDomain, path, q)'
+        },
+        result: {
+          type: String,
+          value: "",
+          reflectToAttribute: true,
+          notify: true
+        },
+        path: {
+          type: String,
+          value: "",
+          reflectToAttribute: true,
+          notify: true
+        },
+        q: {
+          // This should be a js object
+          type: Object,
+          value: {},
+          reflectToAttribute: true,
+          notify: true
+        }
+      },
+
+      _setResult: function(res) {
+        this.result = res;
+      },
+
+      _stringifyQComponents: function(q) {
+        let res = "";
+        for (const key in q) {
+          if (q.hasOwnProperty(key)) {
+            res += key + "%3A" + q[key] + "+";
+          }
+        }
+        return res.slice(0,-1);
+      },
+
+      _computeUrl: function(baseDomain, path, q) {
+        return baseDomain + path + "?q=" + this._stringifyQComponents(q);
+      }
+
+    });
+  </script>
+</dom-module>
