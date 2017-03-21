@@ -1,5 +1,5 @@
 <link rel="import" async href="../bower_components/polymer/polymer.html">
-<link rel="import" async href="../bower_components/paper-input/paper-input.html">
+<link rel="import" async href="../bower_components/paper-card/paper-card.html">
 <link rel="import" async href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" async href="../bower_components/iron-icons/iron-icons.html">
 
@@ -10,15 +10,30 @@
         display: block;
       }
 
+      .profileImg {
+        width: 150px;
+        height: 150px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      }
+
       .icons {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
-
+        margin: 15px;
       }
     </style>
   
     <!-- Result card -->
+    <paper-card>
+      <img class="profileImg" src$="https://github.com/[[_currentItem.name]].png" alt$="[[_currentItem.name]]">
+      <div>[[_currentItem.name]]</div>
+      <ul>
+        <template is="dom-repeat" items="[[_currentItem.projects]]">
+          <li>[[item.name]]</li>
+        </template>
+      </ul>
+    </paper-card>
 
     <!-- UI buttons for swiping left/right -->
     <div class="icons">
@@ -30,8 +45,39 @@
     Polymer({
       is: 'tindev-results',
       properties: {
-          results: Array,
-          index: Number,
+          results: {
+            type: Array,
+            value: function() {
+              return [{
+                id: 123,
+                name: "GijsWeterings",
+                country_code: "NL",
+                languages: ["English", "Dutch"],
+                organizations: [
+                  {
+                    id: 999,
+                    name: "Tindev",
+                    url: "https://github.com/tindev"
+                  }
+                ],
+                projects: [
+                  {
+                    id: 888,
+                    name: "tindev-site",
+                    language: "Dutch",
+                    languages: ["Dutch", "English"],
+                    url: "https://github.com/tindev/tindev-site",
+                    issues: [],
+                    pull_requests: []
+                  }
+                ]
+              }];
+            }
+          },
+          index: {
+            type: Number,
+            value: 0
+          },
           _currentItem: {
             type: Object,
             computed: '_computeCurrentItem(results, index)'
