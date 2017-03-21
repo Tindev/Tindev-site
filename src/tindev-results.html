@@ -1,0 +1,46 @@
+<link rel="import" async href="../bower_components/polymer/polymer.html">
+<link rel="import" async href="../bower_components/paper-input/paper-input.html">
+<link rel="import" async href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" async href="../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="tindev-results">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .icons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+
+      }
+    </style>
+  
+    <!-- Result card -->
+
+    <!-- UI buttons for swiping left/right -->
+    <div class="icons">
+      <paper-fab icon="clear"></paper-fab>
+      <paper-fab icon="favorite"></paper-fab>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'tindev-results',
+      properties: {
+          results: Array,
+          index: Number,
+          _currentItem: {
+            type: Object,
+            computed: '_computeCurrentItem(results, index)'
+          }
+      },
+
+      _computeCurrentItem: function(results, newIndex) {
+        return results[newIndex];
+      }
+    });
+  </script>
+</dom-module>
