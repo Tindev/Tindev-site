@@ -23,33 +23,30 @@
           type: String,
           computed: '_computeUrl(baseDomain, path, q)'
         },
-        result: {
+        lastResult: {
           type: String,
-          value: "",
-          reflectToAttribute: true,
+          value: '',
           notify: true
         },
         path: {
           type: String,
-          value: "",
-          reflectToAttribute: true,
-          notify: true
+          value: ''
         },
         q: {
           // This should be a js object
           type: Object,
-          value: {},
-          reflectToAttribute: true,
-          notify: true
+          value: function() {
+            return {};
+          }
         }
       },
 
       _setResult: function(res) {
-        this.result = res;
+        this.lastResult = res;
       },
 
       _stringifyQComponents: function(q) {
-        let res = "";
+        var res = '';
         for (const key in q) {
           if (q.hasOwnProperty(key)) {
             res += key + "%3A" + q[key] + "+";
