@@ -36,6 +36,20 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.4);
       }
 
+      .organizationImg {
+        width: 35px;
+        height: 35px;
+        border-radius: 3px;
+        vertical-align: middle;
+      }
+
+      .organizationItem {
+        display: block;
+        line-height: 35px;
+        text-decoration: none;
+        color: inherit;
+      }
+
       .icons {
         display: flex;
         flex-direction: row;
@@ -52,7 +66,12 @@
           <div class="defaultInfo">
             <span class="name">[[_currentItem.name]]</span><img class="countryOfOrigin" src$="https://rawgit.com/hjnilsson/country-flags/master/svg/[[_toLowerCase(_currentItem.country_code)]].svg" alt$="[[_currentItem.country_code]]">
             <div class="spokenLanguages">Speaks: [[_printLanguages(_currentItem.languages)]]</div>
+            <div class="organizations">
+              <template is="dom-repeat" items="[[_currentItem.organizations]]">
+                <a href="[[item.url]]" target="_blank" class="organizationItem"><img class="organizationImg" src="[[item.url]].png" alt="[[item.url]]"> [[item.name]]</a>
+              </template>
             </div>
+          </div>
         </div>
         <ul>
           <template is="dom-repeat" items="[[_currentItem.projects]]">
@@ -117,7 +136,13 @@
                 organizations: [
                   {
                     id: 999,
-                    name: "Tindev"
+                    name: "Tindev",
+                    url: "https://github.com/tindev"
+                  },
+                  {
+                    id: 999,
+                    name: "Tindev",
+                    url: "https://github.com/tindev"
                   }
                 ],
                 projects: [
