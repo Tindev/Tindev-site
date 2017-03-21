@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <base href="2017">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
@@ -208,6 +207,7 @@
       <nav>
         <iron-selector attr-for-selected="data-route" id="navigation">
           <a data-route="" href="">Home</a>
+          <a data-route="results" href="results">Results</a>
         </iron-selector>
       </nav>
     </header>
@@ -215,6 +215,7 @@
     <div class="pages">
       <iron-lazy-pages id="pages" attr-for-selected="data-route" fallback-selection="404">
         <tindev-homepage data-route="" data-path="src/tindev-homepage.html"></tindev-homepage>
+        <tindev-results data-route="results" data-path="src/tindev-results.html"></tindev-results>
       </iron-lazy-pages>
     </div>
 
