@@ -147,13 +147,15 @@
       },
 
       _toLowerCase: function(s) {
-        return s.toLowerCase();
+        if (s) {
+          return s.toLowerCase();
+        }
       },
 
       _printLanguages: function(languages) {
-        const t = languages.reduce((all, e) =>  all + ', ' + e );
-        console.log(t);
-        return t;
+        if (languages) {
+          return languages.reduce((all, e) =>  all + ', ' + e );
+        }
       },
 
       _computeCurrentItem: function(results, newIndex) {
