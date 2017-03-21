@@ -1,0 +1,22 @@
+<dom-module id="tindev-details">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <template is="dom-repeat" items="[[results]]">
+      <div>
+        [[item.name]]
+      </div>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'tindev-details',
+      properties: {
+        results: Array
+      }
+    })
+  </script>
+</dom-module>
