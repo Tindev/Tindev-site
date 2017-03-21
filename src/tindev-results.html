@@ -130,7 +130,7 @@
               }];
             }
           },
-          _acceptedResults: {
+          acceptedResults: {
             type: Array,
             value: function() {
               return [];
@@ -165,7 +165,7 @@
       },
 
       _accept: function() {
-        this.push('_acceptedResults', this._currentItem);
+        this.push('acceptedResults', this._currentItem);
         this.index = this.index + 1;
       }
     });

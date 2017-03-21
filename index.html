@@ -206,8 +206,9 @@
       <input id="menu" type="checkbox" />
       <nav>
         <iron-selector attr-for-selected="data-route" id="navigation">
-          <a data-route="" href="">Home</a>
-          <a data-route="results" href="results">Results</a>
+          <a data-route="" href="/">Home</a>
+          <a data-route="results" href="/results">Results</a>
+          <a data-route="details" href="/details">Details</a>
         </iron-selector>
       </nav>
     </header>
@@ -215,7 +216,8 @@
     <div class="pages">
       <iron-lazy-pages id="pages" attr-for-selected="data-route" fallback-selection="404">
         <tindev-homepage data-route="" data-path="/src/tindev-homepage.html"></tindev-homepage>
-        <tindev-results data-route="results" data-path="/src/tindev-results.html"></tindev-results>
+        <tindev-results data-route="results" data-path="/src/tindev-results.html" id="results"></tindev-results>
+        <tindev-details data-route="details" data-path="/src/tindev-details.html" id="details"></tindev-details>
       </iron-lazy-pages>
     </div>
 
@@ -227,6 +229,8 @@
         var route = document.getElementById('route');
         var pages = document.getElementById('pages');
         var menu = document.getElementById('menu');
+        var results = document.getElementById('results');
+        var details = document.getElementById('details');
         navigation.addEventListener('selected-changed', function(e) {
           var selected = e.detail.value;
           route.data.page = selected;
@@ -244,6 +248,10 @@
             var fastPath = document.getElementsByClassName('fast-path');
             fastPath.length && fastPath[0].classList.remove('fast-path');
           }
+        });
+        results.addEventListener('accepted-results-changed', function(e) {
+          console.log(e);
+          details.results = results.acceptedResults;
         });
         route.route = location.route;
       });
