@@ -23,22 +23,29 @@
         margin: 15px;
       }
     </style>
-  
+
     <!-- Result card -->
     <paper-card>
-      <img class="profileImg" src$="https://github.com/[[_currentItem.name]].png" alt$="[[_currentItem.name]]">
-      <div>[[_currentItem.name]]</div>
-      <ul>
-        <template is="dom-repeat" items="[[_currentItem.projects]]">
-          <li>[[item.name]]</li>
-        </template>
-      </ul>
+      <template is="dom-if" if="[[_currentItem]]">
+        <img class="profileImg" src$="https://github.com/[[_currentItem.name]].png" alt$="[[_currentItem.name]]">
+        <div>[[_currentItem.name]]</div>
+        <ul>
+          <template is="dom-repeat" items="[[_currentItem.projects]]">
+            <li>[[item.name]]</li>
+          </template>
+        </ul>
+      </template>
+      <template is="dom-if" if="[[!_currentItem]]">
+        <div>
+          Finished showing all results. <a href="/details">Show detailed information of developers</a>
+        </div>
+      </template>
     </paper-card>
 
     <!-- UI buttons for swiping left/right -->
     <div class="icons">
-      <paper-fab icon="clear"></paper-fab>
-      <paper-fab icon="favorite"></paper-fab>
+      <paper-fab icon="clear" on-tap="_reject" disabled="[[!_currentItem]]"></paper-fab>
+      <paper-fab icon="favorite" on-tap="_accept" disabled="[[!_currentItem]]"></paper-fab>
     </div>
   </template>
   <script>
@@ -74,6 +81,12 @@
               }];
             }
           },
+          _acceptedResults: {
+            type: Array,
+            value: function() {
+              return [];
+            }
+          },
           index: {
             type: Number,
             value: 0
@@ -86,6 +99,15 @@
 
       _computeCurrentItem: function(results, newIndex) {
         return results[newIndex];
+      },
+
+      _reject: function() {
+        this.index = this.index + 1;
+      },
+
+      _accept: function() {
+        this.push('_acceptedResults', this._currentItem);
+        this.index = this.index + 1;
       }
     });
   </script>
