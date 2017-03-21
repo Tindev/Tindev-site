@@ -17,7 +17,7 @@
       properties: {
         baseDomain: {
           type: String,
-          value: "http://elasticsearch:9200/"
+          value: 'http://elasticsearch:9200/'
         },
         computedUrl: {
           type: String,
@@ -49,14 +49,14 @@
         var res = '';
         for (const key in q) {
           if (q.hasOwnProperty(key)) {
-            res += key + "%3A" + q[key] + "+";
+            res += key + '%3A' + q[key] + '+';
           }
         }
-        return res.slice(0,-1);
+        return res.slice(0, -1);
       },
 
       _computeUrl: function(baseDomain, path, q) {
-        return baseDomain + path + "?q=" + this._stringifyQComponents(q);
+        return baseDomain + path + '?q=' + this._stringifyQComponents(q);
       }
 
     });
