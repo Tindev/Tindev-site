@@ -10,6 +10,26 @@
         display: block;
       }
 
+      .card-top-split {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .defaultInfo {
+        flex: 1;
+        padding: 5px;
+      }
+
+      .name {
+        font-size: 16pt;
+        line-height: 16pt;
+      }
+
+      .countryOfOrigin {
+        height: 12pt;
+        padding: 0 5px;
+      }
+
       .profileImg {
         width: 150px;
         height: 150px;
@@ -27,8 +47,13 @@
     <!-- Result card -->
     <paper-card>
       <template is="dom-if" if="[[_currentItem]]">
-        <img class="profileImg" src$="https://github.com/[[_currentItem.name]].png" alt$="[[_currentItem.name]]">
-        <div>[[_currentItem.name]]</div>
+        <div class="card-top-split">
+          <img class="profileImg" src$="https://github.com/[[_currentItem.name]].png" alt$="[[_currentItem.name]]">
+          <div class="defaultInfo">
+            <span class="name">[[_currentItem.name]]</span><img class="countryOfOrigin" src$="https://rawgit.com/hjnilsson/country-flags/master/svg/[[_toLowerCase(_currentItem.country_code)]].svg" alt$="[[_currentItem.country_code]]">
+            <div class="spokenLanguages">Speaks: [[_printLanguages(_currentItem.languages)]]</div>
+            </div>
+        </div>
         <ul>
           <template is="dom-repeat" items="[[_currentItem.projects]]">
             <li>[[item.name]]</li>
@@ -78,6 +103,30 @@
                     pull_requests: []
                   }
                 ]
+              },
+              {
+                id: 124,
+                name: "TimvdLippe",
+                country_code: "NL",
+                languages: ["English", "Dutch"],
+                organizations: [
+                  {
+                    id: 999,
+                    name: "Tindev",
+                    url: "https://github.com/tindev"
+                  }
+                ],
+                projects: [
+                  {
+                    id: 888,
+                    name: "tindev-site",
+                    language: "Dutch",
+                    languages: ["Dutch", "English"],
+                    url: "https://github.com/tindev/tindev-site",
+                    issues: [],
+                    pull_requests: []
+                  }
+                ]
               }];
             }
           },
@@ -95,6 +144,16 @@
             type: Object,
             computed: '_computeCurrentItem(results, index)'
           }
+      },
+
+      _toLowerCase: function(s) {
+        return s.toLowerCase();
+      },
+
+      _printLanguages: function(languages) {
+        const t = languages.reduce((all, e) =>  all + ', ' + e );
+        console.log(t);
+        return t;
       },
 
       _computeCurrentItem: function(results, newIndex) {
