@@ -1,0 +1,204 @@
+<link rel="import" async href="../bower_components/polymer/polymer.html">
+<link rel="import" async href="../bower_components/paper-card/paper-card.html">
+<link rel="import" async href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" async href="../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="tindev-results">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .card-top-split {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .defaultInfo {
+        flex: 1;
+        padding: 5px;
+      }
+
+      .name {
+        font-size: 16pt;
+        line-height: 16pt;
+      }
+
+      .countryOfOrigin {
+        height: 12pt;
+        padding: 0 5px;
+      }
+
+      .profileImg {
+        width: 150px;
+        height: 150px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      }
+
+      .organizationImg {
+        width: 35px;
+        height: 35px;
+        border-radius: 3px;
+        vertical-align: middle;
+      }
+
+      .organizationItem {
+        display: block;
+        line-height: 35px;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .icons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        margin: 15px;
+      }
+    </style>
+
+    <!-- Result card -->
+    <paper-card>
+      <template is="dom-if" if="[[_currentItem]]">
+        <div class="card-top-split">
+          <img class="profileImg" src$="https://github.com/[[_currentItem.name]].png" alt$="[[_currentItem.name]]">
+          <div class="defaultInfo">
+            <span class="name">[[_currentItem.name]]</span><img class="countryOfOrigin" src$="https://rawgit.com/hjnilsson/country-flags/master/svg/[[_toLowerCase(_currentItem.country_code)]].svg" alt$="[[_currentItem.country_code]]">
+            <div class="spokenLanguages">Speaks: [[_printLanguages(_currentItem.languages)]]</div>
+            <div class="organizations">
+              <template is="dom-repeat" items="[[_currentItem.organizations]]">
+                <a href="[[item.url]]" target="_blank" class="organizationItem"><img class="organizationImg" src="[[item.url]].png" alt="[[item.url]]"> [[item.name]]</a>
+              </template>
+            </div>
+          </div>
+        </div>
+        <ul>
+          <template is="dom-repeat" items="[[_currentItem.projects]]">
+            <li>[[item.name]]</li>
+          </template>
+        </ul>
+      </template>
+      <template is="dom-if" if="[[!_currentItem]]">
+        <div>
+          Finished showing all results. <a href="/details">Show detailed information of developers</a>
+        </div>
+      </template>
+    </paper-card>
+
+    <!-- UI buttons for swiping left/right -->
+    <div class="icons">
+      <paper-fab icon="clear" on-tap="_reject" disabled="[[!_currentItem]]"></paper-fab>
+      <paper-fab icon="favorite" on-tap="_accept" disabled="[[!_currentItem]]"></paper-fab>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'tindev-results',
+      properties: {
+          results: {
+            type: Array,
+            value: function() {
+              return [{
+                id: 123,
+                name: "GijsWeterings",
+                country_code: "NL",
+                languages: ["English", "Dutch"],
+                organizations: [
+                  {
+                    id: 999,
+                    name: "Tindev",
+                    url: "https://github.com/tindev"
+                  }
+                ],
+                projects: [
+                  {
+                    id: 888,
+                    name: "tindev-site",
+                    language: "Dutch",
+                    languages: ["Dutch", "English"],
+                    url: "https://github.com/tindev/tindev-site",
+                    issues: [],
+                    pull_requests: [{
+                      id: 630,
+                      url: "https://github.com/tindev/tindev-site/pull/1",
+                      title: "Add profiles of remaining teammembers",
+                      description: "- Add profiles for remaining team members\n- Change name from `Tinder for Bananas` to `Tindev`\n\ncloses #2 "
+                    }]
+                  }
+                ]
+              },
+              {
+                id: 124,
+                name: "TimvdLippe",
+                country_code: "NL",
+                languages: ["English", "Dutch"],
+                organizations: [
+                  {
+                    id: 999,
+                    name: "Tindev",
+                    url: "https://github.com/tindev"
+                  },
+                  {
+                    id: 999,
+                    name: "Tindev",
+                    url: "https://github.com/tindev"
+                  }
+                ],
+                projects: [
+                  {
+                    id: 888,
+                    name: "tindev-site",
+                    language: "Dutch",
+                    languages: ["Dutch", "English"],
+                    url: "https://github.com/tindev/tindev-site",
+                    issues: [],
+                    pull_requests: []
+                  }
+                ]
+              }];
+            }
+          },
+          acceptedResults: {
+            type: Array,
+            value: function() {
+              return [];
+            }
+          },
+          index: {
+            type: Number,
+            value: 0
+          },
+          _currentItem: {
+            type: Object,
+            computed: '_computeCurrentItem(results, index)'
+          }
+      },
+
+      _toLowerCase: function(s) {
+        if (s) {
+          return s.toLowerCase();
+        }
+      },
+
+      _printLanguages: function(languages) {
+        if (languages) {
+          return languages.reduce((all, e) =>  all + ', ' + e );
+        }
+      },
+
+      _computeCurrentItem: function(results, newIndex) {
+        return results[newIndex];
+      },
+
+      _reject: function() {
+        this.index = this.index + 1;
+      },
+
+      _accept: function() {
+        this.push('acceptedResults', this._currentItem);
+        this.index = this.index + 1;
+      }
+    });
+  </script>
+</dom-module>

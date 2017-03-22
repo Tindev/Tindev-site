@@ -5,9 +5,12 @@
    "images-optimized/**/*",
    "src/**/*"
   ],
+  "fragments": [
+    "src/tindev-homepage.html",
+    "src/tindev-results.html",
+    "src/tindev-details.html"
+  ],
   "extraDependencies": [
-    "manifest.json",
-    "favicon.ico",
-    "bower_components/custom-elements/custom-elements.min.js"
+    "bower_components/webcomponentsjs/webcomponents-loader.js"
   ]
 }

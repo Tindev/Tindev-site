@@ -1,0 +1,119 @@
+<link rel="import" async href="../bower_components/paper-card/paper-card.html">
+<link rel="import" async href="../bower_components/marked-element/marked-element.html">
+
+<dom-module id="tindev-details">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .results {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card-top-split {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .defaultInfo {
+        flex: 1;
+        padding: 5px;
+      }
+
+      .name {
+        font-size: 16pt;
+        line-height: 16pt;
+      }
+
+      .countryOfOrigin {
+        height: 12pt;
+        padding: 0 5px;
+      }
+
+      .profileImg {
+        width: 150px;
+        height: 150px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      }
+
+      .organizationItem {
+        display: block;
+        line-height: 35px;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .card-bottom {
+        padding: 5px;
+      }
+
+      paper-card {
+        margin-bottom: 10px;
+      }
+    </style>
+    <div class="results">
+      <template is="dom-repeat" items="[[results]]">
+        <!--<paper-card>
+          <img class="profileImg" src$="https://github.com/[[item.name]].png" alt$="[[item.name]]">
+          <div>
+            [[item.name]]
+          </div>
+          <div>
+            <template is="dom-repeat" items="[[item.projects]]" as="project">
+              <div>
+                [[project.name]]
+              </div>
+              <template is="dom-repeat" items="[[project.pull_requests]]" as="pr">
+                <div>
+                  [[pr.title]]
+                </div>
+                <marked-element markdown="[[pr.description]]"></marked-element>
+              </template>
+            </template>
+          </div>
+        </paper-card>-->
+
+        <paper-card>
+          <template is="dom-if" if="[[item]]">
+            <div class="card-top-split">
+              <img class="profileImg" src$="https://github.com/[[item.name]].png" alt$="[[item.name]]">
+              <div class="defaultInfo">
+                <span class="name">[[item.name]]</span><img class="countryOfOrigin" src$="https://rawgit.com/hjnilsson/country-flags/master/svg/[[_toLowerCase(item.country_code)]].svg" alt$="[[item.country_code]]">
+              </div>
+            </div>
+            <div class="card-bottom">
+              <template is="dom-repeat" items="[[item.projects]]" as="project">
+                <div>
+                  [[project.name]]
+                </div>
+                <template is="dom-repeat" items="[[project.pull_requests]]" as="pr">
+                  <div>
+                    [[pr.title]]
+                  </div>
+                  <marked-element markdown="[[pr.description]]"></marked-element>
+                </template>
+              </template>
+            </div>
+          </template>
+        </paper-card>
+      </template>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'tindev-details',
+      properties: {
+        results: Array
+      },
+
+      _toLowerCase: function(s) {
+        if (s) {
+          return s.toLowerCase();
+        }
+      },
+    })
+  </script>
+</dom-module>
