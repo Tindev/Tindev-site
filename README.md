@@ -1,5 +1,9 @@
 # Tindev
 
+## Local serving
+
+Run `yarn run serve` to inspect the browser locally.
+
 ## Building with docker
 
 Run `docker build -t polymer-nginx .` to build a Docker image.
