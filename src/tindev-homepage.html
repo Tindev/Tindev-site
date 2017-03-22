@@ -4,7 +4,7 @@
 <dom-module id="tindev-homepage">
   <template>
     <style>
-      :host {
+       :host {
         display: block;
       }
 
@@ -20,64 +20,85 @@
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
 
+      .search-query {
+        width: 100%;
+        margin: 0.3em auto 0 auto;
+        font-size: 2em;
+        line-height: 1.5;
+      }
+
+      .search-query input,
+      .search-query select {
+        background: #e1e1e1;
+        width: auto;
+        min-width: 8em;
+        line-height: inherit;
+        display: inline-block;
+        cursor: pointer;
+        border: none;
+        border-bottom: 1px dotted #e8e8e8;
+        font-size: inherit;
+      }
+
+      .search-query button {
+        margin-top: 5px;
+        width: 100%;
+        background-color: #231657;
+        color: #fafafa;
+        border: 0;
+        cursor: pointer;
+        font-size: inherit;
+        padding: 5px;
+      }
+
       @media(max-width: 500px) {
         section {
           margin-bottom: 0;
           box-shadow: none;
           border-bottom: 1px solid #e8e8e8;
         }
-
         h1 {
           word-break: keep-all;
         }
-
       }
     </style>
-    <div>
+    <div class="search-query">
       I am looking for a
-    </div>
-    <paper-input id="language" label="Language" placeholder="Java"></paper-input>
-    <div>
+      <input id="language" label="Language" placeholder="Java"></input>
       developer with
+      <select id="experience">
+        <option>
+          Little
+        </option>
+        <option>
+          Decent
+        </option>
+        <option>
+          A lot of
+        </option>
+      </select>
+        experience who works on
+      <select id="projects">
+        <option>
+          Small
+        </option>
+        <option>
+          Medium
+        </option>
+        <option>
+          Big
+        </option>
+      </select>
+        projects with at least
+        <input id="followers" label="Followers" value="0" type="number"></input>
+        followers.
+      <button on-tap="_search">Search</button>
     </div>
-    <select id="experience">
-      <option>
-        Little
-      </option>
-      <option>
-        Decent
-      </option>
-      <option>
-        A lot of
-      </option>
-    </select>
-    <div>
-      experience who works on
-    </div>
-    <select id="projects">
-      <option>
-        Small
-      </option>
-      <option>
-        Medium
-      </option>
-      <option>
-        Big
-      </option>
-    </select>
-    <div>
-      projects with at least
-    </div>
-    <paper-input id="followers" label="Followers" value="0" type="number"></paper-input>
-    <div>
-      followers.
-    </div>
-    <button on-tap="_search">Search</button>
   </template>
   <script>
     Polymer({
       is: 'tindev-homepage',
-      _search: function() {
+      _search: function () {
         var data = {
           language: this.$.language.value,
           experience: this.$.experience.value,
