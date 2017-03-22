@@ -51,6 +51,7 @@
         --primary-color: #231657;
         --secondary-color: #F39200;
         --tertiary-color: #8BD1EF;
+        --text-color: #fafafa;
 
         --header-height: 64px;
       }
@@ -250,7 +251,6 @@
           }
         });
         results.addEventListener('accepted-results-changed', function(e) {
-          console.log(e);
           details.results = results.acceptedResults;
         });
         route.route = location.route;
@@ -276,7 +276,7 @@
         if (!webComponentsSupported) {
           var script = document.createElement('script');
           script.async = true;
-          script.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+          script.src = 'bower_components/webcomponentsjs/webcomponents-loader.js';
           script.onload = onload;
           document.head.appendChild(script);
         } else {
