@@ -43,7 +43,7 @@
       };
     </script>
 
-    <link rel="import" href="/index-imports.html" async>
+    <link rel="import" href="/index-imports.html">
 
     <style>
       html {
@@ -251,7 +251,6 @@
           }
         });
         results.addEventListener('accepted-results-changed', function(e) {
-          console.log(e);
           details.results = results.acceptedResults;
         });
         route.route = location.route;
@@ -277,7 +276,7 @@
         if (!webComponentsSupported) {
           var script = document.createElement('script');
           script.async = true;
-          script.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+          script.src = 'bower_components/webcomponentsjs/webcomponents-loader.js';
           script.onload = onload;
           document.head.appendChild(script);
         } else {

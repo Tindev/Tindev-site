@@ -47,7 +47,7 @@
 
       _stringifyQComponents: function(q) {
         var res = '';
-        for (const key in q) {
+        for (var key in q) {
           if (q.hasOwnProperty(key)) {
             res += key + '%3A' + q[key] + '+';
           }
