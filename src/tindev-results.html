@@ -2,6 +2,7 @@
 <link rel="import" async href="../bower_components/paper-card/paper-card.html">
 <link rel="import" async href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" async href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="es-query.html" />
 
 <dom-module id="tindev-results">
   <template>
@@ -58,13 +59,15 @@
       }
     </style>
 
+    <es-query last-result="{{results}}"></es-query>
+
     <!-- Result card -->
     <paper-card>
       <template is="dom-if" if="[[_currentItem]]">
         <div class="card-top-split">
-          <img class="profileImg" src$="https://github.com/[[_currentItem.name]].png" alt$="[[_currentItem.name]]">
+          <img class="profileImg" src$="https://github.com/[[_currentItem.login]].png" alt$="[[_currentItem.login]]">
           <div class="defaultInfo">
-            <span class="name">[[_currentItem.name]]</span><img class="countryOfOrigin" src$="https://rawgit.com/hjnilsson/country-flags/master/svg/[[_toLowerCase(_currentItem.country_code)]].svg" alt$="[[_currentItem.country_code]]">
+            <span class="name">[[_currentItem.login]]</span><img class="countryOfOrigin" src$="https://rawgit.com/hjnilsson/country-flags/master/svg/[[_toLowerCase(_currentItem.country_code)]].svg" alt$="[[_currentItem.country_code]]">
             <div class="spokenLanguages">Speaks: [[_printLanguages(_currentItem.languages)]]</div>
             <div class="organizations">
               <template is="dom-repeat" items="[[_currentItem.organizations]]">
@@ -99,64 +102,66 @@
           results: {
             type: Array,
             value: function() {
-              return [{
-                id: 123,
-                name: "GijsWeterings",
-                country_code: "NL",
-                languages: ["English", "Dutch"],
-                organizations: [
-                  {
-                    id: 999,
-                    name: "Tindev",
-                    url: "https://github.com/tindev"
-                  }
-                ],
-                projects: [
-                  {
-                    id: 888,
-                    name: "tindev-site",
-                    language: "Dutch",
-                    languages: ["Dutch", "English"],
-                    url: "https://github.com/tindev/tindev-site",
-                    issues: [],
-                    pull_requests: [{
-                      id: 630,
-                      url: "https://github.com/tindev/tindev-site/pull/1",
-                      title: "Add profiles of remaining teammembers",
-                      description: "- Add profiles for remaining team members\n- Change name from `Tinder for Bananas` to `Tindev`\n\ncloses #2 "
-                    }]
-                  }
-                ]
-              },
-              {
-                id: 124,
-                name: "TimvdLippe",
-                country_code: "NL",
-                languages: ["English", "Dutch"],
-                organizations: [
-                  {
-                    id: 999,
-                    name: "Tindev",
-                    url: "https://github.com/tindev"
-                  },
-                  {
-                    id: 999,
-                    name: "Tindev",
-                    url: "https://github.com/tindev"
-                  }
-                ],
-                projects: [
-                  {
-                    id: 888,
-                    name: "tindev-site",
-                    language: "Dutch",
-                    languages: ["Dutch", "English"],
-                    url: "https://github.com/tindev/tindev-site",
-                    issues: [],
-                    pull_requests: []
-                  }
-                ]
-              }];
+              return [
+              // {
+              //   id: 123,
+              //   name: "GijsWeterings",
+              //   country_code: "NL",
+              //   languages: ["English", "Dutch"],
+              //   organizations: [
+              //     {
+              //       id: 999,
+              //       name: "Tindev",
+              //       url: "https://github.com/tindev"
+              //     }
+              //   ],
+              //   projects: [
+              //     {
+              //       id: 888,
+              //       name: "tindev-site",
+              //       language: "Dutch",
+              //       languages: ["Dutch", "English"],
+              //       url: "https://github.com/tindev/tindev-site",
+              //       issues: [],
+              //       pull_requests: [{
+              //         id: 630,
+              //         url: "https://github.com/tindev/tindev-site/pull/1",
+              //         title: "Add profiles of remaining teammembers",
+              //         description: "- Add profiles for remaining team members\n- Change name from `Tinder for Bananas` to `Tindev`\n\ncloses #2 "
+              //       }]
+              //     }
+              //   ]
+              // },
+              // {
+              //   id: 124,
+              //   name: "TimvdLippe",
+              //   country_code: "NL",
+              //   languages: ["English", "Dutch"],
+              //   organizations: [
+              //     {
+              //       id: 999,
+              //       name: "Tindev",
+              //       url: "https://github.com/tindev"
+              //     },
+              //     {
+              //       id: 999,
+              //       name: "Tindev",
+              //       url: "https://github.com/tindev"
+              //     }
+              //   ],
+              //   projects: [
+              //     {
+              //       id: 888,
+              //       name: "tindev-site",
+              //       language: "Dutch",
+              //       languages: ["Dutch", "English"],
+              //       url: "https://github.com/tindev/tindev-site",
+              //       issues: [],
+              //       pull_requests: []
+              //     }
+              //   ]
+              // }
+              ];
             }
           },
           acceptedResults: {
@@ -188,7 +193,11 @@
       },
 
       _computeCurrentItem: function(results, newIndex) {
-        return results[newIndex];
+        if (results[newIndex]) {
+          return results[newIndex]._source;
+        }
+
+        return undefined;
       },
 
       _reject: function() {

@@ -8,6 +8,7 @@
         url="[[computedUrl]]"
         handle-as="json"
         on-response="_setResult"
+        headers='{"Authorization": "Basic ZWxhc3RpYzpEcmViYmVsd2VnMQ=="}'
         debounce-duration="300"></iron-ajax>
   </template>
   <script>
@@ -17,7 +18,7 @@
       properties: {
         baseDomain: {
           type: String,
-          value: 'http://elasticsearch:9200/'
+          value: 'http://localhost:8081/es/users/_search?pretty=true&size=100&'
         },
         computedUrl: {
           type: String,
@@ -36,27 +37,29 @@
           // This should be a js object
           type: Object,
           value: function() {
-            return {};
+            return {
+              "*": "*"
+            };
           }
         }
       },
 
-      _setResult: function(res) {
-        this.lastResult = res;
+      _setResult: function(e) {
+        this.lastResult = e.detail.response.hits.hits;
       },
 
       _stringifyQComponents: function(q) {
         var res = '';
         for (var key in q) {
           if (q.hasOwnProperty(key)) {
-            res += key + '%3A' + q[key] + '+';
+            res += key + ':' + q[key] + '+';
           }
         }
         return res.slice(0, -1);
       },
 
       _computeUrl: function(baseDomain, path, q) {
-        return baseDomain + path + '?q=' + this._stringifyQComponents(q);
+        return baseDomain + path + 'q=' + this._stringifyQComponents(q);
       }
 
     });
