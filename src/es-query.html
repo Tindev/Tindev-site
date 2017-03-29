@@ -18,7 +18,7 @@
       properties: {
         baseDomain: {
           type: String,
-          value: 'http://localhost:8081/es/users/_search?pretty=true&size=100&'
+          value: window.location.protocol + '//' + window.location.host + '/es/users/_search?pretty=true&size=100&'
         },
         computedUrl: {
           type: String,
