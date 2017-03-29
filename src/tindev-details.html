@@ -79,9 +79,9 @@
         <paper-card>
           <template is="dom-if" if="[[item]]">
             <div class="card-top-split">
-              <img class="profileImg" src$="https://github.com/[[item.name]].png" alt$="[[item.name]]">
+              <img class="profileImg" src$="https://github.com/[[item.login]].png" alt$="[[item.login]]">
               <div class="defaultInfo">
-                <span class="name">[[item.name]]</span><img class="countryOfOrigin" src$="https://rawgit.com/hjnilsson/country-flags/master/svg/[[_toLowerCase(item.country_code)]].svg" alt$="[[item.country_code]]">
+                <span class="name">[[item.login]]</span><img class="countryOfOrigin" src$="https://rawgit.com/hjnilsson/country-flags/master/svg/[[_toLowerCase(item.country_code)]].svg" alt$="[[item.country_code]]">
               </div>
             </div>
             <div class="card-bottom">
