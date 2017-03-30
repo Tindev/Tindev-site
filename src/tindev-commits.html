@@ -1,0 +1,62 @@
+<link rel="import" async href="../bower_components/polymer/polymer.html">
+<link rel="import" async href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" async href="../bower_components/code-highlighter/code-highlighter.html">
+<link rel="import" async href="../bower_components/marked-element/marked-element.html">
+
+<dom-module id="tindev-commits">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      img {
+        float: left;
+        width: 200px;
+        margin: 0 10px 10px 0;
+      }
+
+      .code {
+        clear: left;
+      }
+    </style>
+    <iron-ajax
+      auto
+      url="https://api.github.com/repos/polymer/polymer/commits/3d054bab6645421878598d26498a9f2a47804b5d"
+      last-response="{{commit}}"
+      handle-as="json"
+      ></iron-ajax>
+    <a href$="[[commit.author.html_url]]" target="_blank">
+      <img src$="[[commit.author.avatar_url]]" />
+    </a>
+    <h2>[[_firstLine(commit.commit.message)]]</h2>
+    <h4>[[commit.commit.author.date]] <a href$="[[commit.html_url]]" target="_blank">GitHub</a></h4>
+    <marked-element markdown="[[_lastLines(commit.commit.message)]]"></marked-element>
+    <div class="code">
+      <template is="dom-repeat" items="[[commit.files]]">
+        <h3>[[item.filename]]</h3>
+        <code-highlighter before-start="[[_beforeStart(item.patch)]]" after-start="[[_afterStart(item.patch)]]" code="[[item.patch]]"></code-highlighter>
+      </template>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'tindev-commits',
+      _beforeStart: function(patch) {
+        return Number(patch.match(/@@ -(\d+)/)[1]);
+      },
+      _afterStart: function(patch) {
+        return Number(patch.match(/@@ -.+,.+ \+(\d+)/)[1])
+      },
+      _firstLine: function(message) {
+        return message.split('\n')[0];
+      },
+      _lastLines: function(message) {
+        if (message.indexOf('\n') === -1) {
+          return '';
+        }
+        return message.substring(message.indexOf('\n'));
+      }
+    });
+  </script>
+</dom-module>
