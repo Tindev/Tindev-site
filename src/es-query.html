@@ -18,7 +18,7 @@
       properties: {
         baseDomain: {
           type: String,
-          value: window.location.protocol + '//' + window.location.host + '/es/users/_search?pretty=true&size=100&'
+          value: window.location.protocol + '//' + window.location.host + '/es/'
         },
         computedUrl: {
           type: String,
@@ -59,7 +59,7 @@
       },
 
       _computeUrl: function(baseDomain, path, q) {
-        return baseDomain + path + 'q=' + this._stringifyQComponents(q);
+        return baseDomain + path + '/_search?size=100&q=' + this._stringifyQComponents(q);
       }
 
     });

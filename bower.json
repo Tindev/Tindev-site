@@ -10,7 +10,8 @@
     "iron-lazy-pages": "TimvdLippe/iron-lazy-pages#2.0-preview",
     "paper-fab": "PolymerElements/paper-fab#2.0-preview",
     "marked-element": "polymerelements/marked-element#2.0-preview",
-    "code-highlighter": "preview-code/code-highlighter#^0.1.0"
+    "code-highlighter": "preview-code/code-highlighter#^0.1.0",
+    "star-rating": "acordeonl/star-rating#^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",

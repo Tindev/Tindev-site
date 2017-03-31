@@ -1,47 +1,111 @@
-<link rel="import" async href="../bower_components/polymer/polymer.html">
-<link rel="import" async href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" async href="../bower_components/code-highlighter/code-highlighter.html">
-<link rel="import" async href="../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/code-highlighter/code-highlighter.html">
+<link rel="import" href="../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../bower_components/star-rating/star-rating.html">
+<link rel="import" href="es-query.html">
 
 <dom-module id="tindev-commits">
   <template>
     <style>
       :host {
         display: block;
+        --classification-height: 250px;
       }
 
-      img {
+      .avatar {
         float: left;
         width: 200px;
         margin: 0 10px 10px 0;
       }
 
+      img {
+        width: 100%;
+      }
+
+      h2 {
+        margin-top: 0;
+      }
+
       .code {
         clear: left;
       }
+
+      label {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      star-rating {
+        display: inline-block;
+        --star-color: #231657;
+      }
+
+      button {
+        margin-top: 5px;
+        width: 100%;
+        background-color: #231657;
+        color: #fafafa;
+        border: 0;
+        cursor: pointer;
+        font-size: inherit;
+        padding: 5px;
+      }
+
+      .changes {
+        overflow-y: auto;
+        height: calc(100vh - 100px - var(--classification-height))
+      }
+
+      .classification {
+        max-width: 450px;
+        height: var(--classification-height);
+        margin: 0 auto;
+      }
     </style>
-    <iron-ajax
-      auto
-      url="https://api.github.com/repos/polymer/polymer/commits/3d054bab6645421878598d26498a9f2a47804b5d"
-      last-response="{{commit}}"
-      handle-as="json"
-      ></iron-ajax>
-    <a href$="[[commit.author.html_url]]" target="_blank">
-      <img src$="[[commit.author.avatar_url]]" />
-    </a>
-    <h2>[[_firstLine(commit.commit.message)]]</h2>
-    <h4>[[commit.commit.author.date]] <a href$="[[commit.html_url]]" target="_blank">GitHub</a></h4>
-    <marked-element markdown="[[_lastLines(commit.commit.message)]]"></marked-element>
-    <div class="code">
-      <template is="dom-repeat" items="[[commit.files]]">
-        <h3>[[item.filename]]</h3>
-        <code-highlighter before-start="[[_beforeStart(item.patch)]]" after-start="[[_afterStart(item.patch)]]" code="[[item.patch]]"></code-highlighter>
-      </template>
+    <es-query last-result="{{commits}}" path="commits"></es-query>
+    <div class="changes">
+      <a href$="https://github.com/[[commit.user.userid]]" target="_blank" class="avatar">
+        <img src$="https://github.com/[[commit.user.userid]].png" />
+      </a>
+      <h2>[[_firstLine(commit.title)]]</h2>
+      <h4>[[commit.date]] <a href$="[[commit.html_url]]" target="_blank">GitHub</a></h4>
+      <marked-element markdown="[[_lastLines(commit.title)]]"></marked-element>
+      <div class="code">
+        <template is="dom-repeat" items="[[commit.files]]">
+          <h3>[[item.filename]]</h3>
+          <code-highlighter before-start="[[_beforeStart(item.patch)]]" after-start="[[_afterStart(item.patch)]]" code="[[item.patch]]"></code-highlighter>
+        </template>
+      </div>
+    </div>
+    <div class="classification">
+      <h2>Please rate the commit</h2>
+      <label>Quality of the change <star-rating></star-rating></label>
+      <label>Descriptive commit message <star-rating></star-rating></label>
+      <label>Substantial contribution <star-rating></star-rating></label>
+      <label>Single purpose <star-rating></star-rating></label>
+      <button on-tap="_submit">Submit</button>
     </div>
   </template>
   <script>
     Polymer({
       is: 'tindev-commits',
+      properties: {
+        commit: {
+          type: Object,
+          computed: '_getCommit(commits, index)'
+        },
+        index: {
+          type: Number,
+          value: 0
+        }
+      },
+      _getCommit: function(commits, index) {
+        if (!commits || commits.length <= index) {
+          return {};
+        }
+        return commits[index]._source.commitInfo;
+      },
       _beforeStart: function(patch) {
         return Number(patch.match(/@@ -(\d+)/)[1]);
       },
@@ -49,13 +113,16 @@
         return Number(patch.match(/@@ -.+,.+ \+(\d+)/)[1])
       },
       _firstLine: function(message) {
-        return message.split('\n')[0];
+        return message && message.split('\n')[0];
       },
       _lastLines: function(message) {
-        if (message.indexOf('\n') === -1) {
+        if (!message || message.indexOf('\n') === -1) {
           return '';
         }
         return message.substring(message.indexOf('\n'));
+      },
+      _submit: function() {
+        this.index = this.index + 1;
       }
     });
   </script>
