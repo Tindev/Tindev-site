@@ -69,7 +69,7 @@
         <img src$="https://github.com/[[commit.user.userid]].png" />
       </a>
       <h2>[[_firstLine(commit.title)]]</h2>
-      <h4>[[commit.date]] <a href$="[[commit.html_url]]" target="_blank">GitHub</a></h4>
+      <h4>[[commit.date]] <a href$="[[commit.url]]" target="_blank">[[commit.repo]]</a></h4>
       <marked-element markdown="[[_lastLines(commit.title)]]"></marked-element>
       <div class="code">
         <template is="dom-repeat" items="[[commit.files]]">
