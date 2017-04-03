@@ -54,7 +54,7 @@
 
       .changes {
         overflow-y: auto;
-        height: calc(100vh - 100px - var(--classification-height))
+        height: calc(100vh - 150px - var(--classification-height))
       }
 
       .classification {
@@ -64,7 +64,15 @@
       }
     </style>
     <es-query last-result="{{commits}}" path="commits"></es-query>
-    <div class="changes">
+    <div>
+      <h1>Classification of developers</h1>
+      <p>
+        To be able to determine the expertise of developers, the system requires extensive knowledge of the programming abilities of said developer.
+        Here, we ask you to read through the commit and determine various properties listed at the end of the page.
+        Once you are finished with classifying, you can submit the results and classify a new commit.
+      </p>
+    </div>
+    <div class="changes" id="changes">
       <a href$="https://github.com/[[commit.user.userid]]" target="_blank" class="avatar">
         <img src$="https://github.com/[[commit.user.userid]].png" />
       </a>
@@ -123,6 +131,7 @@
       },
       _submit: function() {
         this.index = this.index + 1;
+        this.$.changes.scrollTop = 0;
       }
     });
   </script>
