@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/code-highlighter/code-highlighter.html">
 <link rel="import" href="../bower_components/marked-element/marked-element.html">
@@ -9,8 +10,9 @@
   <template>
     <style>
       :host {
-        display: block;
+        display: flex;
         --classification-height: 250px;
+        height: 100%;
       }
 
       .avatar {
@@ -54,7 +56,22 @@
 
       .changes {
         overflow-y: auto;
-        height: calc(100vh - 150px - var(--classification-height))
+        height: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .changes > * {
+        flex: 1;
+      }
+
+      .code {
+        display: flex;
+      }
+
+      iron-list {
+        flex: 1;
       }
 
       .classification {
@@ -62,37 +79,55 @@
         height: var(--classification-height);
         margin: 0 auto;
       }
+
+      .description {
+        flex: 1;
+        max-width: 450px;
+        padding: 10px;
+      }
+
+      .information {
+        max-height: 200px;
+      }
     </style>
     <es-query last-result="{{commits}}" path="commits"></es-query>
-    <div>
-      <h1>Classification of developers</h1>
-      <p>
-        To be able to determine the expertise of developers, the system requires extensive knowledge of the programming abilities of said developer.
-        Here, we ask you to read through the commit and determine various properties listed at the end of the page.
-        Once you are finished with classifying, you can submit the results and classify a new commit.
-      </p>
-    </div>
-    <div class="changes" id="changes">
-      <a href$="https://github.com/[[commit.user.userid]]" target="_blank" class="avatar">
-        <img src$="https://github.com/[[commit.user.userid]].png" />
-      </a>
-      <h2>[[_firstLine(commit.title)]]</h2>
-      <h4>[[commit.date]] <a href$="[[commit.url]]" target="_blank">[[commit.repo]]</a></h4>
-      <marked-element markdown="[[_lastLines(commit.title)]]"></marked-element>
-      <div class="code">
-        <template is="dom-repeat" items="[[commit.files]]">
-          <h3>[[item.filename]]</h3>
-          <code-highlighter before-start="[[_beforeStart(item.patch)]]" after-start="[[_afterStart(item.patch)]]" code="[[item.patch]]"></code-highlighter>
-        </template>
+    <div class="description">
+      <div>
+        <h1>Classification of developers</h1>
+        <p>
+          To be able to determine the expertise of developers, the system requires extensive knowledge of the programming abilities of said developer.
+          Here, we ask you to read through the commit and determine various properties listed at the end of the page.
+          Once you are finished with classifying, you can submit the results and classify a new commit.
+        </p>
+      </div>
+      <div class="classification">
+        <h2>Please rate the commit</h2>
+        <label>Quality of the change <star-rating></star-rating></label>
+        <label>Descriptive commit message <star-rating></star-rating></label>
+        <label>Substantial contribution <star-rating></star-rating></label>
+        <label>Single purpose <star-rating></star-rating></label>
+        <button on-tap="_submit">Submit</button>
       </div>
     </div>
-    <div class="classification">
-      <h2>Please rate the commit</h2>
-      <label>Quality of the change <star-rating></star-rating></label>
-      <label>Descriptive commit message <star-rating></star-rating></label>
-      <label>Substantial contribution <star-rating></star-rating></label>
-      <label>Single purpose <star-rating></star-rating></label>
-      <button on-tap="_submit">Submit</button>
+    <div class="changes" id="changes">
+      <div class="information">
+        <a href$="https://github.com/[[commit.user.userid]]" target="_blank" class="avatar">
+          <img src$="https://github.com/[[commit.user.userid]].png" />
+        </a>
+        <h2>[[_firstLine(commit.title)]]</h2>
+        <h4>[[commit.date]] <a href$="[[commit.url]]" target="_blank">[[commit.repo]]</a></h4>
+        <marked-element markdown="[[_lastLines(commit.title)]]"></marked-element>
+      </div>
+      <div class="code">
+        <iron-list items="[[commit.files]]">
+          <template>
+            <div>
+              <h3>[[item.filename]]</h3>
+              <code-highlighter before-start="[[_beforeStart(item.patch)]]" after-start="[[_afterStart(item.patch)]]" code="[[item.patch]]"></code-highlighter>
+            </div>
+          </template>
+        </iron-list>
+      </div>
     </div>
   </template>
   <script>
