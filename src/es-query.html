@@ -26,7 +26,7 @@
         },
         computedUrl: {
           type: String,
-          computed: '_computeUrl(baseDomain, path, q, type)'
+          computed: '_computeUrl(baseDomain, path, q, type, method)'
         },
         lastResult: {
           type: String,
@@ -82,8 +82,8 @@
         return res.slice(0, -1);
       },
 
-      _computeUrl: function(baseDomain, path, q, type) {
-        if (type === 'GET') {
+      _computeUrl: function(baseDomain, path, q, type, method) {
+        if (method === 'GET') {
           return baseDomain + path + '/' + type + '?size=100&q=' + this._stringifyQComponents(q);
         }
         return baseDomain + path + '/' + type;
