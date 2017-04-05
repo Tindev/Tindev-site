@@ -1,0 +1,203 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/code-highlighter/code-highlighter.html">
+<link rel="import" href="../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../bower_components/star-rating/star-rating.html">
+<link rel="import" href="es-query.html">
+
+<dom-module id="tindev-commits">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        --classification-height: 250px;
+        height: 100%;
+      }
+
+      .avatar {
+        float: left;
+        width: 200px;
+        margin: 0 10px 10px 0;
+      }
+
+      img {
+        width: 100%;
+      }
+
+      h2 {
+        margin-top: 0;
+      }
+
+      .code {
+        clear: left;
+      }
+
+      label {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      star-rating {
+        display: inline-block;
+      }
+
+      button {
+        margin-top: 5px;
+        width: 100%;
+        background-color: #231657;
+        color: #fafafa;
+        border: 0;
+        cursor: pointer;
+        font-size: inherit;
+        padding: 5px;
+      }
+
+      .changes {
+        overflow-y: auto;
+        height: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .changes > * {
+        flex: 1;
+      }
+
+      .code {
+        display: flex;
+      }
+
+      iron-list {
+        flex: 1;
+      }
+
+      .classification {
+        max-width: 450px;
+        height: var(--classification-height);
+        margin: 0 auto;
+      }
+
+      .description {
+        flex: 1;
+        max-width: 450px;
+        padding: 10px;
+      }
+
+      .information {
+        max-height: 200px;
+      }
+
+      #error {
+        color: red;
+        display: none;
+      }
+    </style>
+    <es-query last-result="{{commits}}" path="commits"></es-query>
+    <es-query id="post" type="_update" method="POST"></es-query>
+    <div class="description">
+      <div>
+        <h1>Classification of developers</h1>
+        <p>
+          To be able to determine the expertise of developers, the system requires extensive knowledge of the programming abilities of said developer.
+          Here, we ask you to read through the commit and determine various properties listed at the end of the page.
+          Once you are finished with classifying, you can submit the results and classify a new commit.
+        </p>
+      </div>
+      <div class="classification">
+        <h2>Please rate the commit</h2>
+        <div id="error">Please fill in all ratings.</div>
+        <label>Quality of the change <star-rating></star-rating></label>
+        <label>Descriptive commit message <star-rating></star-rating></label>
+        <label>Substantial contribution <star-rating></star-rating></label>
+        <label>Single purpose <star-rating></star-rating></label>
+        <button on-tap="_submit">Submit</button>
+      </div>
+    </div>
+    <div class="changes">
+      <div class="information">
+        <a href$="https://github.com/[[commit.user.userid]]" target="_blank" class="avatar">
+          <img src$="https://github.com/[[commit.user.userid]].png" />
+        </a>
+        <h2>[[_firstLine(commit.title)]]</h2>
+        <h4>[[commit.date]] <a href$="[[commit.url]]" target="_blank">[[commit.repo]]</a></h4>
+        <marked-element markdown="[[_lastLines(commit.title)]]"></marked-element>
+      </div>
+      <div class="code">
+        <iron-list items="[[commit.files]]" id="changes">
+          <template>
+            <div>
+              <h3>[[item.filename]]</h3>
+              <code-highlighter before-start="[[_beforeStart(item.patch)]]" after-start="[[_afterStart(item.patch)]]" code="[[item.patch]]"></code-highlighter>
+            </div>
+          </template>
+        </iron-list>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'tindev-commits',
+      properties: {
+        commit: {
+          type: Object,
+          computed: '_getCommit(commits, index)'
+        },
+        index: {
+          type: Number,
+          value: 0
+        }
+      },
+      _getCommit: function(commits, index) {
+        if (!commits || commits.length <= index) {
+          return {};
+        }
+        return commits[index]._source;
+      },
+      _beforeStart: function(patch) {
+        return Number(patch.match(/@@ -(\d+)/)[1]);
+      },
+      _afterStart: function(patch) {
+        return Number(patch.match(/@@ -.+,.+ \+(\d+)/)[1])
+      },
+      _firstLine: function(message) {
+        return message && message.split('\n')[0];
+      },
+      _lastLines: function(message) {
+        if (!message || message.indexOf('\n') === -1) {
+          return '';
+        }
+        return message.substring(message.indexOf('\n'));
+      },
+      _submit: function() {
+        var rates = this.root.querySelectorAll('star-rating');
+        for (var i = 0; i < rates.length; i++) {
+          if (rates[i].rate === 0) {
+            this.$.error.style.display = 'block';
+            return;
+          }
+        }
+        this.index = this.index + 1;
+        this.$.changes.scrollToIndex(0);
+        var body = {
+          doc: {
+            value: 0
+          }
+        }
+        for (var i = 0; i < rates.length; i++) {
+          body.doc.value = this._calculateWeightedValue(body.doc.value, rates[i].rate);
+          rates[i].rate = 0;
+        }
+        this.$.post.body = body;
+        this.$.post.path = 'commits/commit/' + this.commits[this.index]._id;
+        this.$.post.generateRequest();
+        this.$.error.style.display = 'none';
+      },
+
+      _calculateWeightedValue: function(initial, value) {
+        return initial + (value / 20.0);
+      }
+    });
+  </script>
+</dom-module>

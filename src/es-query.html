@@ -5,8 +5,12 @@
   <template>
     <iron-ajax
         auto
+        id="ajax"
         url="[[computedUrl]]"
+        method="[[method]]"
         handle-as="json"
+        body="[[body]]"
+        content-type="application/json"
         on-response="_setResult"
         headers='{"Authorization": "Basic ZWxhc3RpYzpEcmViYmVsd2VnMQ=="}'
         debounce-duration="300"></iron-ajax>
@@ -18,11 +22,11 @@
       properties: {
         baseDomain: {
           type: String,
-          value: window.location.protocol + '//' + window.location.host + '/es/users/_search?pretty=true&size=100&'
+          value: window.location.protocol + '//' + window.location.host + '/es/'
         },
         computedUrl: {
           type: String,
-          computed: '_computeUrl(baseDomain, path, q)'
+          computed: '_computeUrl(baseDomain, path, q, type, method)'
         },
         lastResult: {
           type: String,
@@ -32,6 +36,20 @@
         path: {
           type: String,
           value: ''
+        },
+        type: {
+          type: String,
+          value: '_search'
+        },
+        body: {
+          type: Object,
+          value: function() {
+            return {};
+          }
+        },
+        method: {
+          type: String,
+          value: 'GET'
         },
         q: {
           // This should be a js object
@@ -45,7 +63,13 @@
       },
 
       _setResult: function(e) {
-        this.lastResult = e.detail.response.hits.hits;
+        if (this.method === 'GET') {
+          this.lastResult = e.detail.response.hits.hits;
+        }
+      },
+
+      generateRequest: function() {
+        this.$.ajax.generateRequest();
       },
 
       _stringifyQComponents: function(q) {
@@ -58,8 +82,11 @@
         return res.slice(0, -1);
       },
 
-      _computeUrl: function(baseDomain, path, q) {
-        return baseDomain + path + 'q=' + this._stringifyQComponents(q);
+      _computeUrl: function(baseDomain, path, q, type, method) {
+        if (method === 'GET') {
+          return baseDomain + path + '/' + type + '?size=100&q=' + this._stringifyQComponents(q);
+        }
+        return baseDomain + path + '/' + type;
       }
 
     });
