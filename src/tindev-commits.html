@@ -96,6 +96,7 @@
       }
     </style>
     <es-query last-result="{{commits}}" path="commits"></es-query>
+    <es-query id="post" type="_update" method="POST"></es-query>
     <div class="description">
       <div>
         <h1>Classification of developers</h1>
@@ -180,10 +181,23 @@
         }
         this.index = this.index + 1;
         this.$.changes.scrollToIndex(0);
+        var body = {
+          doc: {
+            value: 0
+          }
+        }
         for (var i = 0; i < rates.length; i++) {
+          body.doc.value = this._calculateWeightedValue(body.doc.value, rates[i].rate);
           rates[i].rate = 0;
         }
+        this.$.post.body = body;
+        this.$.post.path = 'commits/commit/' + this.commits[this.index]._id;
+        this.$.post.generateRequest();
         this.$.error.style.display = 'none';
+      },
+
+      _calculateWeightedValue: function(initial, value) {
+        return initial + (value / 20.0);
       }
     });
   </script>
