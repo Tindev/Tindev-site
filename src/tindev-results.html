@@ -59,7 +59,7 @@
       }
     </style>
 
-    <es-query last-result="{{results}}" path="users"></es-query>
+    <es-query last-result="{{results}}" query="{{query}}" path="users"></es-query>
 
     <!-- Result card -->
     <paper-card>
@@ -104,6 +104,9 @@
             value: function() {
               return [];
             }
+          },
+          query: {
+            type: Object
           },
           acceptedResults: {
             type: Array,

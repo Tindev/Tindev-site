@@ -226,7 +226,7 @@
 
     <div class="pages">
       <iron-lazy-pages id="pages" attr-for-selected="data-route" fallback-selection="404">
-        <tindev-homepage data-route="" data-path="/src/tindev-homepage.html"></tindev-homepage>
+        <tindev-homepage data-route="" data-path="/src/tindev-homepage.html" id="home"></tindev-homepage>
         <tindev-results data-route="results" data-path="/src/tindev-results.html" id="results"></tindev-results>
         <tindev-details data-route="details" data-path="/src/tindev-details.html" id="details"></tindev-details>
         <tindev-commits data-route="classify" data-path="/src/tindev-commits.html" id="commits" class="large-width"></tindev-details>
@@ -243,6 +243,7 @@
         var menu = document.getElementById('menu');
         var results = document.getElementById('results');
         var details = document.getElementById('details');
+        var homepage = document.getElementById('home');
         navigation.addEventListener('selected-changed', function(e) {
           var selected = e.detail.value;
           route.data.page = selected;
@@ -263,6 +264,10 @@
         });
         results.addEventListener('accepted-results-changed', function(e) {
           details.results = results.acceptedResults;
+        });
+        homepage.addEventListener('search', function(query) {
+          results.setAttribute('query', JSON.stringify(query.detail));
+          route.route = "results";
         });
         route.route = location.route;
       });
