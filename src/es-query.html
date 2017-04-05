@@ -5,19 +5,14 @@
   <template>
     <iron-ajax
         auto
-<<<<<<< Updated upstream
         id="ajax"
         url="[[computedUrl]]"
         method="[[method]]"
-=======
-        url="[[baseDomain]]"
->>>>>>> Stashed changes
         handle-as="json"
         body="[[body]]"
         content-type="application/json"
         on-response="_setResult"
         headers='{"Authorization": "Basic ZWxhc3RpYzpEcmViYmVsd2VnMQ=="}'
-        body="[[body]]"
         debounce-duration="300"></iron-ajax>
   </template>
   <script>
@@ -58,12 +53,7 @@
         },
         q: {
           // This should be a js object
-          type: Object,
-          value: function() {
-            return {
-              "*": "*"
-            };
-          }
+          type: Object
         }
       },
 
@@ -133,6 +123,7 @@
       },
 
       _parseFollowers: function(followersCount) {
+        console.log(followersCount);
         return {
           range: {
             followers: {
@@ -143,6 +134,7 @@
       },
 
       _buildQueryParam: function(q) {
+        console.warn(q);
         if(q === undefined){
           return;
         }
@@ -152,6 +144,8 @@
         shouldList.push(this._parseExperience(q.experience));
         // shouldList.push(this._parseProjects(q.projects));
         shouldList.push(this._parseFollowers(q.followers));
+
+        shouldList = shouldList.filter(function (value) { return value !== null});
 
         var queryObj = {
           query: {
