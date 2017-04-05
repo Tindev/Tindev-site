@@ -11,7 +11,7 @@
     "paper-fab": "PolymerElements/paper-fab#2.0-preview",
     "marked-element": "polymerelements/marked-element#2.0-preview",
     "code-highlighter": "preview-code/code-highlighter#^0.1.0",
-    "star-rating": "acordeonl/star-rating#^2.0.0",
+    "star-rating": "TimvdLippe/star-rating#patch-1",
     "iron-list": "polymerelements/iron-list#2.0-preview"
   },
   "devDependencies": {

@@ -89,6 +89,11 @@
       .information {
         max-height: 200px;
       }
+
+      #error {
+        color: red;
+        display: none;
+      }
     </style>
     <es-query last-result="{{commits}}" path="commits"></es-query>
     <div class="description">
@@ -102,6 +107,7 @@
       </div>
       <div class="classification">
         <h2>Please rate the commit</h2>
+        <div id="error">Please fill in all ratings.</div>
         <label>Quality of the change <star-rating></star-rating></label>
         <label>Descriptive commit message <star-rating></star-rating></label>
         <label>Substantial contribution <star-rating></star-rating></label>
@@ -109,7 +115,7 @@
         <button on-tap="_submit">Submit</button>
       </div>
     </div>
-    <div class="changes" id="changes">
+    <div class="changes">
       <div class="information">
         <a href$="https://github.com/[[commit.user.userid]]" target="_blank" class="avatar">
           <img src$="https://github.com/[[commit.user.userid]].png" />
@@ -119,7 +125,7 @@
         <marked-element markdown="[[_lastLines(commit.title)]]"></marked-element>
       </div>
       <div class="code">
-        <iron-list items="[[commit.files]]">
+        <iron-list items="[[commit.files]]" id="changes">
           <template>
             <div>
               <h3>[[item.filename]]</h3>
@@ -147,7 +153,7 @@
         if (!commits || commits.length <= index) {
           return {};
         }
-        return commits[index]._source.commitInfo;
+        return commits[index]._source;
       },
       _beforeStart: function(patch) {
         return Number(patch.match(/@@ -(\d+)/)[1]);
@@ -165,8 +171,19 @@
         return message.substring(message.indexOf('\n'));
       },
       _submit: function() {
+        var rates = this.root.querySelectorAll('star-rating');
+        for (var i = 0; i < rates.length; i++) {
+          if (rates[i].rate === 0) {
+            this.$.error.style.display = 'block';
+            return;
+          }
+        }
         this.index = this.index + 1;
-        this.$.changes.scrollTop = 0;
+        this.$.changes.scrollToIndex(0);
+        for (var i = 0; i < rates.length; i++) {
+          rates[i].rate = 0;
+        }
+        this.$.error.style.display = 'none';
       }
     });
   </script>
