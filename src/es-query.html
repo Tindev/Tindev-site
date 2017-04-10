@@ -133,7 +133,8 @@
         return {
           range: {
             followers: {
-              gte: followersCount
+              gte: followersCount,
+              lte: 10 * followersCount
             }
           }
         };
@@ -157,7 +158,14 @@
             bool: {
               should: shouldList
             }
-          }
+          },
+          sort: [
+            {
+              calculated_skill: {
+                order: 'desc'
+              }
+            }
+          ]
         }
         return queryObj;
       }
