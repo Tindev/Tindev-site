@@ -26,7 +26,7 @@
         },
         computedUrl: {
           type: String,
-          computed: '_computeUrl(baseDomain, path, q, type)'
+          computed: '_computeUrl(baseDomain, path, q, type, method)'
         },
         lastResult: {
           type: String,
@@ -54,12 +54,18 @@
         q: {
           // This should be a js object
           type: Object,
-          value: function() { return {};}
+          value: function() {
+            return {};
+          }
         }
       },
 
       _setResult: function(e) {
         this.lastResult = e.detail.response.hits && e.detail.response.hits.hits;
+      },
+
+      generateRequest: function() {
+        this.$.ajax.generateRequest();
       },
 
       generateRequest: function() {
@@ -77,11 +83,10 @@
         }
         else {
           return null;
-        } 
+        }
       },
 
       _computeUrl: function(baseDomain, path, q, type) {
-        console.log(baseDomain + " " + path + " " + q + " " + type);
         if (type === 'GET') {
           return baseDomain + path + '/' + type + '?size=100&q=' + this._stringifyQComponents(q);
         }
@@ -125,7 +130,6 @@
       },
 
       _parseFollowers: function(followersCount) {
-        console.log(followersCount);
         return {
           range: {
             followers: {
@@ -136,7 +140,6 @@
       },
 
       _buildQueryParam: function(q) {
-        console.warn(q);
         if(q === undefined){
           return;
         }

@@ -43,7 +43,7 @@
       };
     </script>
 
-    <link rel="import" href="/index-imports.html" async>
+    <link rel="import" href="/index-imports.html">
 
     <style>
       html {
@@ -218,8 +218,6 @@
         <iron-selector attr-for-selected="data-route" id="navigation">
           <a data-route="" href="/">Home</a>
           <a data-route="classify" href="/classify">Classify</a>
-          <a data-route="results" href="/results">Results</a>
-          <a data-route="details" href="/details">Details</a>
         </iron-selector>
       </nav>
     </header>
@@ -229,7 +227,7 @@
         <tindev-homepage data-route="" data-path="/src/tindev-homepage.html" id="home"></tindev-homepage>
         <tindev-results data-route="results" data-path="/src/tindev-results.html" id="results"></tindev-results>
         <tindev-details data-route="details" data-path="/src/tindev-details.html" id="details"></tindev-details>
-        <tindev-commits data-route="classify" data-path="/src/tindev-commits.html" id="commits" class="large-width"></tindev-details>
+        <tindev-commits data-route="classify" data-path="/src/tindev-commits.html" id="classify" class="large-width"></tindev-commits>
       </iron-lazy-pages>
     </div>
 
@@ -267,12 +265,10 @@
         });
         homepage.addEventListener('search', function(query) {
           var results = document.getElementById('results');
-          console.log(query.detail);
           results.query = query.detail;
           // results.setAttribute('query', JSON.stringify(query.detail));
           var route = document.getElementById('route');
           route.set('route.path', "/results");
-          console.log(route);
         });
         route.route = location.route;
       });
