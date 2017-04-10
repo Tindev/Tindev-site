@@ -53,14 +53,13 @@
         },
         q: {
           // This should be a js object
-          type: Object
+          type: Object,
+          value: function() { return {};}
         }
       },
 
       _setResult: function(e) {
-        if (this.method === 'GET') {
-          this.lastResult = e.detail.response.hits.hits;
-        }
+        this.lastResult = e.detail.response.hits && e.detail.response.hits.hits;
       },
 
       generateRequest: function() {
@@ -82,11 +81,14 @@
       },
 
       _computeUrl: function(baseDomain, path, q, type) {
+        console.log(baseDomain + " " + path + " " + q + " " + type);
         if (type === 'GET') {
           return baseDomain + path + '/' + type + '?size=100&q=' + this._stringifyQComponents(q);
         }
         if (type === '_search') {
-          return baseDomain + path + '/' + type + '?size=100&q=' + this._buildQueryParam(q);
+          this.set('method', 'POST');
+          this.set('body', JSON.stringify(this._buildQueryParam(q)))
+          return baseDomain + path + '/' + type + '?size=100';
         }
         return baseDomain + path + '/' + type;
       },
@@ -140,7 +142,7 @@
         }
         var shouldList = [];
 
-        shouldList.push(this._parseLanguages(q.language));
+        // shouldList.push(this._parseLanguages(q.language));
         shouldList.push(this._parseExperience(q.experience));
         // shouldList.push(this._parseProjects(q.projects));
         shouldList.push(this._parseFollowers(q.followers));
@@ -154,8 +156,7 @@
             }
           }
         }
-        console.log(JSON.stringify(queryObj));
-        return encodeURI(JSON.stringify(queryObj));
+        return queryObj;
       }
 
     });

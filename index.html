@@ -266,8 +266,13 @@
           details.results = results.acceptedResults;
         });
         homepage.addEventListener('search', function(query) {
-          results.setAttribute('query', JSON.stringify(query.detail));
-          route.route = "results";
+          var results = document.getElementById('results');
+          console.log(query.detail);
+          results.query = query.detail;
+          // results.setAttribute('query', JSON.stringify(query.detail));
+          var route = document.getElementById('route');
+          route.set('route.path', "/results");
+          console.log(route);
         });
         route.route = location.route;
       });

@@ -59,7 +59,7 @@
       }
     </style>
 
-    <es-query last-result="{{results}}" query="{{query}}" path="users"></es-query>
+    <es-query last-result="{{results}}" q="{{query}}" path="users"></es-query>
 
     <!-- Result card -->
     <paper-card>
@@ -68,7 +68,8 @@
           <img class="profileImg" src$="https://github.com/[[_currentItem.login]].png" alt$="[[_currentItem.login]]">
           <div class="defaultInfo">
             <span class="name">[[_currentItem.login]]</span><img class="countryOfOrigin" src$="https://rawgit.com/hjnilsson/country-flags/master/svg/[[_toLowerCase(_currentItem.country_code)]].svg" alt$="[[_currentItem.country_code]]">
-            <div class="spokenLanguages">Speaks: [[_printLanguages(_currentItem.languages)]]</div>
+            <div class="spokenLanguages">Followers: [[_printLanguages(_currentItem.languages)]]</div>
+            [[_printObj(_currentItem)]]
             <div class="organizations">
               <template is="dom-repeat" items="[[_currentItem.organizations]]">
                 <a href="[[item.url]]" target="_blank" class="organizationItem"><img class="organizationImg" src="[[item.url]].png" alt="[[item.url]]"> [[item.name]]</a>
@@ -124,6 +125,10 @@
           }
       },
 
+      _printObj: function(f) {
+        return f.followers;
+      },
+
       _toLowerCase: function(s) {
         if (s) {
           return s.toLowerCase();
@@ -137,6 +142,7 @@
       },
 
       _computeCurrentItem: function(results, newIndex) {
+        console.log(results);
         if (results[newIndex]) {
           return results[newIndex]._source;
         }
