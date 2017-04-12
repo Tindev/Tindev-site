@@ -11,6 +11,12 @@
         display: block;
       }
 
+      a {
+        color: -webkit-link;
+        cursor: auto;
+        text-decoration: underline;
+      }
+
       .card-top-split {
         display: flex;
         justify-content: space-between;
@@ -96,7 +102,7 @@
       </template>
       <template is="dom-if" if="[[!_currentItem]]">
         <div>
-          Finished showing all results. <a href="/details">Show detailed information of developers</a>
+          Finished showing all results. <a on-tap="_done">Show detailed information of developers</a>
         </div>
       </template>
     </div>
