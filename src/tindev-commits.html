@@ -16,7 +16,6 @@
       }
 
       .avatar {
-        float: left;
         width: 200px;
         margin: 0 10px 10px 0;
       }
@@ -87,11 +86,16 @@
 
       .information {
         max-height: 200px;
+        display: flex;
       }
 
       #error {
         color: red;
         display: none;
+      }
+
+      .changes-file {
+        min-height: 20px;
       }
     </style>
     <es-query last-result="{{commits}}" path="commits"></es-query>
@@ -117,17 +121,21 @@
     </div>
     <div class="changes">
       <div class="information">
-        <a href$="https://github.com/[[commit.user.userid]]" target="_blank" class="avatar">
-          <img src$="https://github.com/[[commit.user.userid]].png" />
-        </a>
-        <h2>[[_firstLine(commit.title)]]</h2>
-        <h4>[[commit.date]] <a href$="[[commit.url]]" target="_blank">[[commit.repo]]</a></h4>
-        <marked-element markdown="[[_lastLines(commit.title)]]"></marked-element>
+        <div class="avatar">
+          <a href$="https://github.com/[[commit.user.userid]]" target="_blank" class="avatar">
+            <img src$="https://github.com/[[commit.user.userid]].png" />
+          </a>
+        </div>
+        <div>
+          <h2>[[_firstLine(commit.title)]]</h2>
+          <h4>[[commit.date]] <a href$="[[commit.url]]" target="_blank">[[commit.repo]]</a></h4>
+          <marked-element markdown="[[_lastLines(commit.title)]]"></marked-element>
+        </div>
       </div>
       <div class="code">
-        <iron-list items="[[commit.files]]" id="changes">
+        <iron-list items="[[commit.files]]" id="changes" max-physical-count="3">
           <template>
-            <div>
+            <div class="changes-file">
               <h3>[[item.filename]]</h3>
               <code-highlighter before-start="[[_beforeStart(item.patch)]]" after-start="[[_afterStart(item.patch)]]" code="[[item.patch]]"></code-highlighter>
             </div>
@@ -178,8 +186,6 @@
             return;
           }
         }
-        this.index = this.index + 1;
-        this.$.changes.scrollToIndex(0);
         var body = {
           doc: {
             value: 0
@@ -190,9 +196,14 @@
           rates[i].rate = 0;
         }
         this.$.post.body = body;
-        this.$.post.path = 'commits/commit/' + this.commits[this.index]._id;
+        this.$.post.path = 'commits/commit/' + this.commits[this.index + 1]._id;
         this.$.post.generateRequest();
         this.$.error.style.display = 'none';
+
+        this.async(function() {
+          this.index = this.index + 1;
+          this.$.changes.scrollToIndex(0);
+        });
       },
 
       _calculateWeightedValue: function(initial, value) {

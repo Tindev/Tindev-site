@@ -55,38 +55,131 @@
           // This should be a js object
           type: Object,
           value: function() {
-            return {
-              "*": "*"
-            };
+            return {};
           }
+        },
+        sort: {
+          type: Boolean,
+          value: false
         }
       },
 
       _setResult: function(e) {
-        if (this.method === 'GET') {
-          this.lastResult = e.detail.response.hits.hits;
-        }
+        this.lastResult = e.detail.response.hits && e.detail.response.hits.hits;
       },
 
       generateRequest: function() {
         this.$.ajax.generateRequest();
       },
 
-      _stringifyQComponents: function(q) {
-        var res = '';
-        for (var key in q) {
-          if (q.hasOwnProperty(key)) {
-            res += key + ':' + q[key] + '+';
-          }
-        }
-        return res.slice(0, -1);
+      generateRequest: function() {
+        this.$.ajax.generateRequest();
       },
 
-      _computeUrl: function(baseDomain, path, q, type, method) {
-        if (method === 'GET') {
+      _parseLanguages: function(language) {
+        // For now, support 1 language
+        if(language){
+          return {
+            exists: {
+              field: "languages." + language.toLowerCase()
+            }
+          };
+        }
+        else {
+          return null;
+        }
+      },
+
+      _computeUrl: function(baseDomain, path, q, type) {
+        if (type === 'GET') {
           return baseDomain + path + '/' + type + '?size=100&q=' + this._stringifyQComponents(q);
         }
+        if (type === '_search') {
+          this.set('method', 'POST');
+          this.set('body', JSON.stringify(this._buildQueryParam(q)))
+          return baseDomain + path + '/' + type + '?size=100';
+        }
         return baseDomain + path + '/' + type;
+      },
+
+      _parseExperience: function(experience) {
+        if (!experience) {
+          return {};
+        }
+        var min = 0;
+        var max = 1;
+
+        if (experience === "Little") {
+          min = 0;
+          max = 0.33;
+        }
+        else if (experience === "Decent") {
+          min = 0.33;
+          max = 0.67;
+        }
+        else if (experience === "A lot of") {
+          min = 0.67;
+          max = 1.0;
+        }
+
+        return {
+          range: {
+            calculated_skill: {
+              lte: max,
+              gte: min
+            }
+          }
+        };
+      },
+
+      _parseProjects: function(projects) {
+        return null;
+      },
+
+      _parseFollowers: function(followersCount) {
+        if (!followersCount) {
+          return {};
+        }
+        return {
+          range: {
+            followers: {
+              gte: followersCount,
+              lte: 10 * followersCount
+            }
+          }
+        };
+      },
+
+      _buildQueryParam: function(q) {
+        if(q === undefined){
+          return;
+        }
+        var shouldList = [];
+
+        // shouldList.push(this._parseLanguages(q.language));
+        shouldList.push(this._parseExperience(q.experience));
+        // shouldList.push(this._parseProjects(q.projects));
+        shouldList.push(this._parseFollowers(q.followers));
+
+        shouldList = shouldList.filter(function (value) { return value !== null});
+
+        var queryObj = {
+          query: {
+            bool: {
+              should: shouldList
+            }
+          }
+        }
+        if (this.sort) {
+          queryObj.sort = [
+            {
+              calculated_skill: {
+                order: 'desc'
+              }
+            }
+          ];
+        }
+        return queryObj;
       }
 
     });
