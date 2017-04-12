@@ -79,11 +79,13 @@
       _parseLanguages: function(language) {
         // For now, support 1 language
         if(language){
-          return {
-            exists: {
-              field: "languages." + language.toLowerCase()
-            }
+          var res = {
+            range: { }
           };
+          res.range["language." + language] = {
+                "gte": "0"
+              }
+          return res
         }
         else {
           return null;
@@ -156,7 +158,7 @@
         }
         var shouldList = [];
 
-        // shouldList.push(this._parseLanguages(q.language));
+        shouldList.push(this._parseLanguages(q.language));
         shouldList.push(this._parseExperience(q.experience));
         // shouldList.push(this._parseProjects(q.projects));
         shouldList.push(this._parseFollowers(q.followers));
