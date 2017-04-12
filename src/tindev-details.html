@@ -81,22 +81,18 @@
             <div class="card-top-split">
               <img class="profileImg" src$="https://github.com/[[item.login]].png" alt$="[[item.login]]">
               <div class="defaultInfo">
-                <span class="name">[[item.login]]</span><img class="countryOfOrigin" src$="https://rawgit.com/hjnilsson/country-flags/master/svg/[[_toLowerCase(item.country_code)]].svg" alt$="[[item.country_code]]">
-              </div>
-            </div>
-            <div class="card-bottom">
-              <template is="dom-repeat" items="[[item.projects]]" as="project">
-                <div>
-                  [[project.name]]
+                <a href$="[[item.html_url]]" target="_blank" class="name">[[item.login]]</a>
+                <div class="spokenLanguages">Followers: [[item.followers]]</div>
+                <div>Organisation: [[_printString(item.company)]]</div>
+                <div>Public repos (including forks): [[_printString(item.public_repos)]]</div>
+                <div>Programming languages: [[_printArray(item.language)]]</div>
+                <div>Living in: [[_printString(item.location)]]</div>
+                <div class="organizations">
+                  <template is="dom-repeat" items="[[item.organizations]]">
+                    <a href="[[item.url]]" target="_blank" class="organizationItem"><img class="organizationImg" src="[[item.url]].png" alt="[[item.url]]"> [[item.name]]</a>
+                  </template>
                 </div>
-                <template is="dom-repeat" items="[[project.pull_requests]]" as="pr">
-                  <div>
-                    [[pr.title]]
-                  </div>
-                  <marked-element markdown="[[pr.description]]"></marked-element>
-                </template>
-              </template>
-            </div>
+              </div>
           </template>
         </paper-card>
       </template>
@@ -114,6 +110,23 @@
           return s.toLowerCase();
         }
       },
+
+      _printString: function(s) {
+        return s || 'Unknown';
+      },
+
+      _printArray: function(languages) {
+        if (!languages) {
+          return 'Unknown';
+        }
+        var array = languages || [];
+        if (!languages.reduce) {
+          array = [];
+          for (var field in languages) {
+            array.push(field);
+          }
+        }
+      }
     })
   </script>
 </dom-module>
