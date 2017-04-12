@@ -57,6 +57,10 @@
           value: function() {
             return {};
           }
+        },
+        sort: {
+          type: Boolean,
+          value: false
         }
       },
 
@@ -99,6 +103,9 @@
       },
 
       _parseExperience: function(experience) {
+        if (!experience) {
+          return {};
+        }
         var min = 0;
         var max = 1;
 
@@ -130,6 +137,9 @@
       },
 
       _parseFollowers: function(followersCount) {
+        if (!followersCount) {
+          return {};
+        }
         return {
           range: {
             followers: {
@@ -158,14 +168,16 @@
             bool: {
               should: shouldList
             }
-          },
-          sort: [
+          }
+        }
+        if (this.sort) {
+          queryObj.sort = [
             {
               calculated_skill: {
                 order: 'desc'
               }
             }
-          ]
+          ];
         }
         return queryObj;
       }
