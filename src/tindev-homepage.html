@@ -106,9 +106,11 @@
         var data = {
           language: this.$.language.value,
           experience: this.$.experience.value,
-          projects: this.$.projects.value,
-          followers: this.$.followers.value
+          projects: this.$.projects.value
         };
+        if (this.$.followers.value > 0) {
+          data.followers = this.$.followers.value; 
+        }
         this.fire('search', data);
       }
     });
