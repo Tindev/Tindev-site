@@ -3,7 +3,8 @@
   "shell": "index.html",
   "sources": [
    "images-optimized/**/*",
-   "src/**/*"
+   "src/**/*",
+   "bower_components/**/*"
   ],
   "fragments": [
     "src/tindev-homepage.html",
