@@ -9,6 +9,7 @@
     "app-route": "PolymerElements/app-route#2.0-preview",
     "iron-lazy-pages": "TimvdLippe/iron-lazy-pages#2.0-preview",
     "paper-fab": "PolymerElements/paper-fab#2.0-preview",
+    "paper-card": "PolymerElements/paper-card#2.0-preview",
     "marked-element": "polymerelements/marked-element#2.0-preview",
     "code-highlighter": "preview-code/code-highlighter#^0.1.0",
     "star-rating": "TimvdLippe/star-rating#patch-1",
@@ -34,6 +35,7 @@
     "marked-element": "2.0-preview",
     "paper-fab": "2.0-preview",
     "paper-button": "2.0-preview",
+    "paper-card": "2.0-preview",
     "iron-flex-layout": "2.0-preview",
     "paper-behaviors": "2.0-preview",
     "paper-ripple": "2.0-preview",
@@ -46,6 +48,7 @@
     "iron-icon": "2.0-preview",
     "iron-validatable-behavior": "2.0-preview",
     "iron-list": "2.0-preview",
-    "iron-scroll-target-behavior": "2.0-preview"
+    "iron-scroll-target-behavior": "2.0-preview",
+    "iron-image": "2.0-preview"
   }
 }

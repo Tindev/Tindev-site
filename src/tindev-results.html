@@ -189,6 +189,7 @@
 
       _done: function() {
         var route = document.getElementById('route');
+        document.getElementById('details').results = this.acceptedResults;
         route.set('route.path', "/details");
       }
     });

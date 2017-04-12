@@ -56,7 +56,7 @@
     </style>
     <div class="results">
       <template is="dom-repeat" items="[[results]]">
-        <!--<paper-card>
+        <paper-card>
           <img class="profileImg" src$="https://github.com/[[item.name]].png" alt$="[[item.name]]">
           <div>
             [[item.name]]
@@ -74,9 +74,9 @@
               </template>
             </template>
           </div>
-        </paper-card>-->
+        </paper-card>
 
-        <paper-card>
+        <!-- <paper-card>
           <template is="dom-if" if="[[item]]">
             <div class="card-top-split">
               <img class="profileImg" src$="https://github.com/[[item.login]].png" alt$="[[item.login]]">
@@ -98,7 +98,7 @@
               </template>
             </div>
           </template>
-        </paper-card>
+        </paper-card> -->
       </template>
     </div>
   </template>
