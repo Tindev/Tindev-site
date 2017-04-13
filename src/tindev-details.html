@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/marked-element/marked-element.html">
 
 <dom-module id="tindev-details">
@@ -94,6 +95,8 @@
           </template>
         </paper-card> -->
       </template>
+
+      <paper-button on-tap="_downloadJSON">Download results as JSON</paper-button>
     </div>
   </template>
   <script>
@@ -101,6 +104,13 @@
       is: 'tindev-details',
       properties: {
         results: Array
+      },
+
+      _downloadJSON: function() {
+        var link = document.createElement('a');
+        link.download = 'tindev.json';
+        link.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.results));
+        link.click();
       },
 
       _toLowerCase: function(s) {
